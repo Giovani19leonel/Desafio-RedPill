@@ -7,6 +7,9 @@ using RedPill.Models;
 
 namespace RedPill.Data
 {
+    /// <summary>
+    /// Scaffold-DbContext "Server=localhost;Database=RedpillDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+    /// </summary>
     public partial class RedpillDBContext : DbContext
     {
         public DbSet<Usuario> Usuario { get; set; }
