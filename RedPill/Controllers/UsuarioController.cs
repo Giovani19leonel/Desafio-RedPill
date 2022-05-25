@@ -63,9 +63,9 @@ namespace RedPill.Controllers
         /// Método para Excluir um usuário no Banco de dados
         /// </summary>
         [HttpDelete("/Api/DeletarUsuario")]
-        public IActionResult DeleteUsuario(DeletarUsuarioViewModel deletarUsuário)
+        public IActionResult DeleteUsuario(DeletarUsuarioViewModel deletarUsuario)
         {
-            var usuarios = contas.DeletarUsuario(deletarUsuário.Id, deletarUsuário.Email, deletarUsuário.Senha);
+            var usuarios = contas.DeletarUsuario(deletarUsuario.Id, deletarUsuario.Email, deletarUsuario.Senha);
             return Ok(usuarios);
         }
     }
