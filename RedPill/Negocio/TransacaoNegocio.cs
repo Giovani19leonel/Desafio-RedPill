@@ -25,8 +25,10 @@ namespace RedPill.Negocio
             // verifica se o identificador fornecido é de uma conta valida
             if (VerificacaoContaValida(UsuarioId))
             {
-                transacao.UsuarioId = Guid.Parse(UsuarioId); transacao.Valor = transacao.Valor + Valor;
-                transacao.HoraLancamento = DateTime.Now; transacao.TransacaoId = Guid.NewGuid();
+                transacao.UsuarioId = Guid.Parse(UsuarioId);
+                transacao.Valor = transacao.Valor + Valor;
+                transacao.HoraLancamento = DateTime.Now;
+                transacao.TransacaoId = Guid.NewGuid();
                 transacao.TransferenciaId = Guid.NewGuid();
                 contaExistente = true;
             }

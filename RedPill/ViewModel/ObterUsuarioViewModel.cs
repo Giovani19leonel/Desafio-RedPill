@@ -8,7 +8,7 @@ namespace RedPill.ViewModel
     /// <summary>
     /// campo ID do usuário
     /// </summary>
-    public class ObterUsuárioViewModel : CadastroViewModel
+    public class ObterUsuarioViewModel : CadastroViewModel
     {
         /// <summary>
         /// herda nome,email,senha da class CadastroViewModel

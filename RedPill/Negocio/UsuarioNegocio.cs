@@ -15,14 +15,14 @@ namespace RedPill.Negocio
     {
         // Metodo para pegar todos os Usúarios cadastrados no Banco de dados.
         // retorna uma lista dos usuários
-        public List<ObterUsuárioViewModel> ObterTodosUsuarios()
+        public List<ObterUsuarioViewModel> ObterTodosUsuarios()
         {
-            var listaUsuarios = new List<ObterUsuárioViewModel>();
+            var listaUsuarios = new List<ObterUsuarioViewModel>();
 
             using (RedpillDBContext db = new RedpillDBContext())
             {
                 var usuarios = db.Usuario;
-                listaUsuarios.AddRange(usuarios.Select(x => new ObterUsuárioViewModel
+                listaUsuarios.AddRange(usuarios.Select(x => new ObterUsuarioViewModel
                 { Id = x.UsuarioId, Email = x.Email, Nome = x.Nome, Senha = x.Senha }).ToList());
             }
 
