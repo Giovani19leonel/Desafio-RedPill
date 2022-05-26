@@ -126,10 +126,9 @@ namespace RedPill.Negocio
 
         public bool VerificacaoContaValida(string UsuarioId)
         {
-            string vazia = "";
             var usuario = new UsuarioNegocio();
             var usuarioObtido = usuario.ObterUsuario(UsuarioId);
-            return usuarioObtido.Nome != vazia && usuarioObtido.Email != vazia && usuarioObtido.Senha != vazia;
+            return !string.IsNullOrEmpty(usuarioObtido.Nome) && !string.IsNullOrEmpty(usuarioObtido.Email) && !string.IsNullOrEmpty(usuarioObtido.Senha);
         }
     }
 }
