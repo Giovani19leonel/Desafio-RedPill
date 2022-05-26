@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace RedPill.Controllers
 {
     [ApiController]
+    [Authorize]
     public class TransacaoController : Controller
     {
         /// <summary>
@@ -23,7 +24,7 @@ namespace RedPill.Controllers
         /// <summary>
         /// Metodo Requisição para consultar o Saldo de uma conta no Banco de dados
         /// </summary>
-        [Authorize]
+        
         [HttpGet("/Api/Transacao/ConsultarSaldo")]
         public IActionResult ConsultarSaldo(string id)
         {
@@ -33,7 +34,6 @@ namespace RedPill.Controllers
         /// <summary>
         /// Metodo Requisição para consultar o Extrato de uma conta no Banco de dados
         /// </summary>
-        [Authorize]
         [HttpGet("/Api/Transacao/ConsultarExtrato")]
         public IActionResult ConsultarExtrato(string id)
         {
@@ -44,7 +44,6 @@ namespace RedPill.Controllers
         /// <summary>
         /// Método Requisição para efetuar um deposito(Simulado) no banco de dados.
         /// </summary>
-        [Authorize]
         [HttpPost("/Api/Transacao/Depositar")]
         public IActionResult Depositar(DepositarViewModel depositar)
         {
@@ -54,7 +53,6 @@ namespace RedPill.Controllers
         /// <summary>
         /// Método Requisição para efetuar uma transferencia entre contas no Banco de dados
         /// </summary>
-        [Authorize]
         [HttpPost("/Api/Transacao/Transferir")]
         public IActionResult Transferir(TransferenciaViewModel transferencia)
         {

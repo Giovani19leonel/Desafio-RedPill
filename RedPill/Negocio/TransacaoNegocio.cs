@@ -19,9 +19,9 @@ namespace RedPill.Negocio
         /// <summary>
         /// Metodo para inserir um valor no banco de dados na conta fornecida pelo Identificador[id]
         /// </summary>
-        public bool Depositar(string UsuarioId, decimal Valor)
+        public string Depositar(string UsuarioId, decimal Valor)
         {
-            bool contaExistente;
+            bool contaExistente = false;
             // verifica se o identificador fornecido é de uma conta valida
             if (VerificacaoContaValida(UsuarioId))
             {
@@ -30,8 +30,6 @@ namespace RedPill.Negocio
                 transacao.TransferenciaId = Guid.NewGuid();
                 contaExistente = true;
             }
-            else
-                contaExistente = false;
             using (RedpillDBContext db = new RedpillDBContext())
             {
                 // caso a conta seja valida ele insere no Banco de dados
@@ -39,9 +37,9 @@ namespace RedPill.Negocio
                 {
                     db.Entry(transacao).State = EntityState.Added;
                     db.SaveChanges();
-                    return true;
+                    return "Deposito efetuado com sucesso!";
                 }
-                return false;
+                return "Falha na autenticação, essa conta não existe!";
             }
         }
 
@@ -78,8 +76,10 @@ namespace RedPill.Negocio
                     {
                         Transacao transacao1 = new Transacao();
 
-                        transacao1.UsuarioId = Guid.Parse(UsuarioId); transacao1.Valor = transacao1.Valor - Valor;
-                        transacao1.HoraLancamento = DateTime.Now; transacao1.TransacaoId = Guid.NewGuid();
+                        transacao1.UsuarioId = Guid.Parse(UsuarioId);
+                        transacao1.Valor = transacao1.Valor - Valor;
+                        transacao1.HoraLancamento = DateTime.Now;
+                        transacao1.TransacaoId = Guid.NewGuid();
                         transacao1.TransferenciaId = transacaoID;
                         db.Entry(transacao1).State = EntityState.Added;
                         db.SaveChanges();
@@ -87,8 +87,10 @@ namespace RedPill.Negocio
 
                         Transacao transacao2 = new Transacao();
 
-                        transacao2.UsuarioId = Guid.Parse(UsuarioTransferenciaId); transacao2.Valor = transacao2.Valor + Valor;
-                        transacao2.HoraLancamento = DateTime.Now; transacao2.TransacaoId = Guid.NewGuid();
+                        transacao2.UsuarioId = Guid.Parse(UsuarioTransferenciaId);
+                        transacao2.Valor = transacao2.Valor + Valor;
+                        transacao2.HoraLancamento = DateTime.Now;
+                        transacao2.TransacaoId = Guid.NewGuid();
                         transacao2.TransferenciaId = transacaoID;
                         db.Entry(transacao2).State = EntityState.Added;
                         db.SaveChanges();
@@ -117,16 +119,15 @@ namespace RedPill.Negocio
         }
 
         /// <summary>
-        /// Metodo apra verificar se uma conta é valida, no caso se ela existe no Banco de dados.
+        /// Metodo para verificar se uma conta é valida, no caso se ela existe no Banco de dados.
         /// </summary>
+
         public bool VerificacaoContaValida(string UsuarioId)
         {
-            var lista = new List<Usuario>();
+            string vazia = "";
             var usuario = new UsuarioNegocio();
-            lista = usuario.ObterUsuario(UsuarioId);
-            if (lista.Exists(usuario => usuario.UsuarioId == Guid.Parse(UsuarioId)))
-                return true;
-            return false;
+            var usuarioObtido = usuario.ObterUsuario(UsuarioId);
+            return usuarioObtido.Nome != vazia && usuarioObtido.Email != vazia && usuarioObtido.Senha != vazia;
         }
     }
 }

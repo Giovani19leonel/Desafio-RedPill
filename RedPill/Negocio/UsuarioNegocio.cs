@@ -28,27 +28,25 @@ namespace RedPill.Negocio
 
             return listaUsuarios;
         }
-
-
         /// <summary>
         /// Método para obter um usuário especifico cadastrado no Banco de dados, 
         /// ele recebe como parametro o Identificador da conta que será exibida.
         /// Retorna uma lista com os campos dessa conta
         /// </summary>
-        public List<Usuario> ObterUsuario(string id)
+        public Usuario ObterUsuario(string id)
         {
-            var listaUsuarios = new List<Usuario>();
+            var usuario = new Usuario();
 
             using (RedpillDBContext db = new RedpillDBContext())
             {
-                var usuarios = db.Usuario.Where(x => x.UsuarioId.ToString() == id).ToList();
-                listaUsuarios.AddRange(usuarios.Select(x => new Usuario
-                { UsuarioId = x.UsuarioId, Email = x.Email, Nome = x.Nome, Senha = x.Senha }).ToList());
+                var registro = db.Usuario.FirstOrDefault(x => x.UsuarioId.ToString() == id);
+                usuario.Email = registro.Email;
+                usuario.Senha = registro.Senha;
+                usuario.Nome = registro.Nome;
+                usuario.UsuarioId = registro.UsuarioId;
             }
-
-            return listaUsuarios;
+            return usuario;
         }
-
         /// <summary>
         /// Método para obter o Token de acesso as transações da API, é necessário fornecer uma conta válida no Banco de dados
         /// Faz a verificação de acesso e retorna o Token com validação de 1 hora!
@@ -60,7 +58,8 @@ namespace RedPill.Negocio
             var autenticar = usuarios.Exists(usuario => usuario.Email == email && usuario.Senha == senha);
             if (autenticar)
             {
-                user.Email = email; user.Senha = senha;
+                user.Email = email;
+                user.Senha = senha;
                 var token = TokenService.GenerateToken(user);
                 var resultado = "O seu token de acesso as transações é: "  + token;
                 return resultado;
@@ -81,7 +80,10 @@ namespace RedPill.Negocio
                 var consultar = usuarios.Exists(usuario => usuario.Email == email);
                 if (!consultar)
                 {
-                    usuario.Email = email; usuario.UsuarioId = Guid.NewGuid(); usuario.Nome = nome; usuario.Senha = senha;
+                    usuario.Email = email;
+                    usuario.UsuarioId = Guid.NewGuid();
+                    usuario.Nome = nome;
+                    usuario.Senha = senha;
                     db.Entry(usuario).State = EntityState.Added;
                     db.SaveChanges();
                     var result = "Conta criada com sucesso, seu ID de identificação é: " + usuario.UsuarioId + "\n Para receber seu token de acesso faça o login";
@@ -104,7 +106,9 @@ namespace RedPill.Negocio
             {
                 if (Autenticar(id, email, senha))
                 {
-                    usuario.Email = email; usuario.UsuarioId = Guid.Parse(id); usuario.Senha = senha;
+                    usuario.Email = email;
+                    usuario.UsuarioId = Guid.Parse(id);
+                    usuario.Senha = senha;
                     db.Entry(usuario).State = EntityState.Deleted;
                     db.SaveChanges();
                     return "Conta excluida com sucesso!";
@@ -118,15 +122,8 @@ namespace RedPill.Negocio
         /// </summary>
         private bool Autenticar(string id, string email, string senha)
         {
-            var lista = new List<Usuario>();
-            var autenticar = Logar(email, senha);
-            lista = ObterUsuario(id);
-            if (lista.Exists(usuario => usuario.Email == email && usuario.Senha == senha))
-            {
-                return true;
-            }
-            else
-                return false;
+            var usuario = ObterUsuario(id);
+            return usuario.Email == email && usuario.Senha == senha;
         }
     }
 }
