@@ -109,15 +109,11 @@ namespace RedPill.Negocio
         /// </summary>
         public List<Transacao> ObterExtrato(string UsuarioId)
         {
-            var listaUsuarios = new List<Transacao>();
-
             using (RedpillDBContext db = new RedpillDBContext())
             {
                 var usuarios = db.Transacao.Where(x => x.UsuarioId == Guid.Parse(UsuarioId)).ToList();
-                listaUsuarios.AddRange(usuarios.Select(x => new Transacao
-                { UsuarioId = x.UsuarioId, Valor = x.Valor, HoraLancamento = x.HoraLancamento, TransacaoId = x.TransacaoId, TransferenciaId = x.TransferenciaId }).ToList());
+                return usuarios;
             }
-            return listaUsuarios;
         }
 
         /// <summary>
